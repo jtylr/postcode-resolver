@@ -1,0 +1,12 @@
+<?php
+
+/*
+ * Rename to config.php
+ */
+ 
+ $google_api_keys = [
+ 	'array',
+ 	'of',
+ 	'keys'
+ ];
+ 
