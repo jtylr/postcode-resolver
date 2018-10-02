@@ -9,7 +9,7 @@ declare(ticks = 1);
 pcntl_signal(SIGINT, function() {
     global $results;
     echo "\n\n";
-    echo json_encode($results);
+    echo json_encode($results, JSON_PRETTY_PRINT);
     echo "\n\n";
     die;
 });
@@ -20,8 +20,8 @@ $i = 0;
 
 while ($i < count($postcodes)) {
     $key = $google_api_keys[$api_key];
-    echo "Using key: {$key}\n";
-    echo "Grabbing lat/long for {$postcodes[$i]}\n";
+    plog("Using key: {$key}");
+    plog("Grabbing lat/long for {$postcodes[$i]}");
     $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=' .
                 $key . '&address=' . urlencode($postcodes[$i]);    
     $data = file_get_contents($url);
@@ -29,7 +29,7 @@ while ($i < count($postcodes)) {
     
     if ($data->status == 'OVER_QUERY_LIMIT') {
         if ($api_key == count($google_api_keys)) {
-            echo "Out of API keys";
+            plog("Out of API keys");
             $i = count($postcodes);
         }
         $api_key++;
@@ -45,5 +45,10 @@ while ($i < count($postcodes)) {
     }
 }
 echo "\n\n";
-echo json_encode($results);
+echo json_encode($results, JSON_PRETTY_PRINT);
 echo "\n\n";
+
+function plog($msg) {
+    $date = date('H:i:s');
+    echo "[{$date}] {$msg}\n";
+}
